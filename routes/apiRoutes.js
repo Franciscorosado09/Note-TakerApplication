@@ -25,11 +25,11 @@ module.exports = (app) => {
 
 
 
-  // API POST Requests
-  // Below code handles when a user submits a form and thus submits data to the
+  
+  // Below code handles when a user submits note and thus submits data to the db
 
   app.post('/api/notes', (req, res) => {
-    // Note the code here. Our "server" will respond to requests and let users know the notes saved
+   
 
     let addNewNote = {
       title: req.body.title,
@@ -67,14 +67,33 @@ module.exports = (app) => {
   
   });
 
-  // I added this below code so you could clear out the table while working with the functionality.
-  // Don"t worry about it!
+  // pulls in data to delete the selected note by user cycles through array to single out the note to be deleted and resends array back into db
 
   app.delete('/api/notes', (req, res) => {
 
-    let deleteNote = req.params.id
-    
-  
+    const deleteNote = req.params.id;
+
+   for (let i = 0; i < addNotes.length; i++) {
+     if (addNotes[i].id === deleteNote){
+       addNotes.splice(i, 1);
+     };
+     
+   };
+   
+
+   fs.writeFile('./db/db.json', JSON.stringify(addNotes), (err) =>{
+     if (err) throw (err);
+
+
+
+
+
+
+
+
+   });
+
+   res.send((dbData));
 
 
 
