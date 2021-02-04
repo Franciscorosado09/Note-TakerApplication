@@ -4,50 +4,87 @@
 
 const dbData = require('../db/db.json');
 const path = require('path');
-const fs = require ('fs')
+const fs = require('fs');
+const uniqid = require('uniqid');
 
 // ROUTING
 
 module.exports = (app) => {
-  // API GET Requests
-  // Below code handles when users "visit" a page.
-  // In each of the below cases when a user visits a link
-  // (ex: localhost:PORT/api/admin... they are shown a JSON of the data in the table)
-  // ---------------------------------------------------------------------------
+  let addNotes = []
 
-  app.get('/api/notes', (req, res) => res.json(notes), );
+  //calls notes from db.json
+  app.get('/api/notes', (req, res) => {
 
-  
+    // reads the information and repost data to saved content until deleted
+    fs.readFile("./db/db.json", (err, data) => {
+      if (err) throw (err);
+      res.send(data);
+
+    });
+  });
+
+
 
   // API POST Requests
-  // Below code handles when a user submits a form and thus submits data to the server.
-  // In each of the below cases, when a user submits form data (a JSON object)
-  // ...the JSON is pushed to the appropriate JavaScript array
-  // (ex. User fills out a reservation request... this data is then sent to the server...
-  // Then the server saves the data to the tableData array)
-  // ---------------------------------------------------------------------------
+  // Below code handles when a user submits a form and thus submits data to the
 
-  app.post('/api/tables', (req, res) => {
-    // Note the code here. Our "server" will respond to requests and let users know if they have a table or not.
-    // It will do this by sending out the value "true" have a table
-    // req.body is available since we're using the body parsing middleware
-    if (dbData.length < 5) {
-      dbData.push(req.body);
-      res.json(true);
-    } else {
-      waitListData.push(req.body);
-      res.json(false);
-    }
+  app.post('/api/notes', (req, res) => {
+    // Note the code here. Our "server" will respond to requests and let users know the notes saved
+
+    let addNewNote = {
+      title: req.body.title,
+      text: req.body.text,
+      id: uniqid()
+
+
+
+    };
+
+    addNotes.push(addNewNote);
+    res.json(addNewNote);
+
+    fs.readFile('./db/db.json', (err, data) => {
+      if (err) throw (err);
+      addNotes = JSON.parse(data);
+      addNotes.push(addNewNote);
+
+      fs.writeFile('./db/db.json', JSON.stringify(addNotes), (err) => {
+        if (err) throw (err);
+        res.json(dbData)
+
+
+
+
+
+      })
+
+    })
+
+
+
+
+
+  
   });
 
   // I added this below code so you could clear out the table while working with the functionality.
   // Don"t worry about it!
 
-  app.post('/api/clear', (req, res) => {
-    // Empty out the arrays of data
-    dbData.length = 0;
-    waitListData.length = 0;
+  app.delete('/api/notes', (req, res) => {
 
-    res.json({ ok: true });
-  });
+    let deleteNote = req.params.id
+    
+  
+
+
+
+    })
+
+
+
+
+
+
+
+
 };
