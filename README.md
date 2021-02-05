@@ -45,7 +45,7 @@ THEN I am presented with empty fields to enter a new note title and the note’s
 
 link to github: https://github.com/Franciscorosado09/Note-TakerApplication
 
-Link to heroku:
+Link to heroku: https://notetakerapplication123.herokuapp.com/
 
 
 
